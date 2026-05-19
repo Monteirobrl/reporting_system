@@ -1,7 +1,7 @@
 const SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSMZM5DrVaNAC-wQXkin1IBYqFowi8KiyPyZ7Goqpc922ePYhJCn0ElG9ZS9oaVhTtF7fkLc4j3xx4P/pub?gid=0&single=true&output=csv";
 
 // Imagem da logo em Base64 (fallback se a URL falhar)
-const PF_LOGO_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Pol%C3%ADcia_Federal_do_Brasil_%28logo%29.svg/200px-Pol%C3%ADcia_Federal_do_Brasil_%28logo%29.svg.png";
+const PF_LOGO_URL = "https://imgur.com/hNp5XDa.png";
 
 // ========================= ESTADO =========================
 let currentAgent = null;

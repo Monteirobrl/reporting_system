@@ -1,87 +1,56 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infertilidade</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SRPF — Sistema de Registro da Polícia Federal</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 </head>
-<body>
-    <header class="header">
-        <h1 class="header-title">Infertilidade</h1>
-        <p class="header-subtitle">Desvendando aspetos da infertilidade masculina e feminina</p>
-    </header>
+<body class="login-page">
 
-    <main class="container">
-        <section class="card reveal intro-section">
-            <h2 class="card-title">Epílogo</h2>
-            <p class="card-text">
-                Nesta apresentação, aprofundamos no complexo universo da infertilidade, abordando suas definições, causas e impactos tanto na saúde reprodutiva masculina quanto feminina.
-            </p>
-            <p class="card-text">
-                Exploramos detalhadamente as possíveis origens da infertilidade, identificando onde as falhas ou condições podem ocorrer nos sistemas reprodutivos de ambos os parceiros.
-            </p>
-        </section>
-
-        <section class="card reveal feedback-section">
-            <h2 class="card-title">Sua Avaliação Ajuda!</h2>
-            <p class="card-text">
-                Sua perspetiva é muito valiosa. Por favor, dedique um momento para preencher o formulário de avaliação.
-            </p>
-            <a href="https://forms.gle/BJZn2wgdMTFvbP1H7" target="_blank" class="btn primary-btn">
-                <i class="fas fa-clipboard-list"></i>
-                <span>Avaliar Apresentação</span>
-            </a>
-        </section>
-
-        <section class="card reveal download-section">
-            <h2 class="card-title">Material Complementar</h2>
-            <p class="card-text">
-                Para revisar os detalhes e aprofundar seus conhecimentos, baixe a versão completa da apresentação em slides (PDF).
-            </p>
-            <a href="Infertilidade.pdf" download class="btn secondary-btn">
-                <i class="fas fa-download"></i>
-                <span>Baixar Slides (PDF)</span>
-            </a>
-        </section>
-
-        <section class="card reveal credits-section">
-            <h2 class="card-title">Contexto Escolar</h2>
-            <p class="card-text">Trabalho realizado no âmbito da disciplina de Saúde.</p>
-            <p class="card-text"><strong>Docente:</strong> Regina Gonçalves</p>
-            <p class="card-text"><strong>Discente:</strong> Gabriel Monteiro Dias</p>
-
-            <div class="logos-container">
-                <img src="https://i.imgur.com/BFhbFGQ.png" alt="Logo da Escola">
-                <img src="https://i.imgur.com/lb5Ujx2.png" alt="Logo do Curso">
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2026 Gabriel Monteiro Dias</p>
-            <p>Curso Profissional</p>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="logo-block">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Polícia_Federal_do_Brasil_%28logo%29.svg/200px-Polícia_Federal_do_Brasil_%28logo%29.svg.png"
+               alt="Polícia Federal" class="pf-logo" />
+          <div class="header-text">
+            <div class="header-republic">REPÚBLICA FEDERATIVA DO BRASIL</div>
+            <div class="header-ministry">MINISTÉRIO DA JUSTIÇA E SEGURANÇA PÚBLICA</div>
+            <div class="header-dept">DEPARTAMENTO DE POLÍCIA FEDERAL</div>
+            <div class="header-system">SISTEMA DE REGISTRO E PROTOCOLOS FEDERAIS</div>
+          </div>
         </div>
-    </footer>
+        <div class="divider-gold"></div>
+        <p class="login-subtitle">ACESSO RESTRITO — AGENTES AUTORIZADOS</p>
+      </div>
 
-    <script>
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 100; // Quanto do elemento deve aparecer para disparar
+      <form class="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="login">LOGIN DO AGENTE</label>
+          <input type="text" id="login" placeholder="Ex: agente.silva" required autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="senha">SENHA</label>
+          <input type="password" id="senha" placeholder="••••••••" required />
+        </div>
+        <div id="login-error" class="login-error" style="display:none;"></div>
+        <button type="submit" class="btn-login" id="btn-login">
+          <span id="btn-text">ACESSAR SISTEMA</span>
+          <span id="btn-loading" style="display:none;">VERIFICANDO...</span>
+        </button>
+      </form>
 
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                }
-            }
-        }
-        window.addEventListener("scroll", reveal);
-        window.addEventListener("load", reveal); // Garante que o topo carregue visível
-    </script>
+      <div class="login-footer">
+        <div class="footer-line">
+          ⚠ O acesso não autorizado constitui crime conforme Art. 313-A do Código Penal
+        </div>
+        <div class="footer-line small">SRPF v2.4 — ROLEPLAY FIVEM · Uso exclusivo para servidores de RP</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

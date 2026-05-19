@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SRPF — Portal de Documentos</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="portal-page">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Polícia_Federal_do_Brasil_%28logo%29.svg/200px-Polícia_Federal_do_Brasil_%28logo%29.svg.png" alt="PF" />
+      <div class="sidebar-title">SRPF</div>
+    </div>
+
+    <div class="agent-card">
+      <div class="agent-badge" id="sb-badge">—</div>
+      <div class="agent-info">
+        <div class="agent-name" id="sb-name">Carregando...</div>
+        <div class="agent-rank" id="sb-rank">—</div>
+        <div class="agent-id" id="sb-id">ID: —</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">OCORRÊNCIAS</div>
+      <a href="#" class="nav-item active" onclick="showForm('bo')">📋 Boletim de Ocorrência</a>
+      <a href="#" class="nav-item" onclick="showForm('relatorio')">📝 Relatório Policial</a>
+      <a href="#" class="nav-item" onclick="showForm('prisao')">🔒 Registro de Prisão</a>
+      <a href="#" class="nav-item" onclick="showForm('apreensao')">📦 Registro de Apreensão</a>
+
+      <div class="nav-section-label" style="margin-top:16px;">DOCUMENTOS</div>
+      <a href="#" class="nav-item" onclick="showForm('porte')">🔫 Porte de Arma</a>
+      <a href="#" class="nav-item" onclick="showForm('licenca')">🏢 Licença de Empresa</a>
+
+      <div class="nav-section-label" style="margin-top:16px;">SISTEMA</div>
+      <a href="#" class="nav-item" onclick="logout()">🚪 Encerrar Sessão</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="protocol-counter">Protocolos gerados: <span id="proto-count">0</span></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title" id="form-title">Boletim de Ocorrência</div>
+        <div class="topbar-sub">Preencha todos os campos obrigatórios antes de gerar o PDF</div>
+      </div>
+      <div class="topbar-right">
+        <div class="date-display" id="date-display"></div>
+        <button class="btn-generate" id="btn-generate" onclick="generatePDF()">
+          ⬇ GERAR PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== FORMULÁRIOS ===== -->
+
+    <!-- BOLETIM DE OCORRÊNCIA -->
+    <div id="form-bo" class="form-panel active">
+      <div class="form-grid">
+        <div class="form-section">
+          <h3 class="section-title">Identificação da Ocorrência</h3>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Número do BO *</label>
+              <input type="text" id="bo-numero" placeholder="Ex: BO-2024-001234" />
+            </div>
+            <div class="field-group">
+              <label>Data e Hora *</label>
+              <input type="datetime-local" id="bo-data" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group full">
+              <label>Local da Ocorrência *</label>
+              <input type="text" id="bo-local" placeholder="Endereço completo" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Natureza do Delito *</label>
+              <select id="bo-natureza">
+                <option value="">Selecione...</option>
+                <option>Roubo</option>
+                <option>Furto</option>
+                <option>Tráfico de Drogas</option>
+                <option>Homicídio</option>
+                <option>Lesão Corporal</option>
+                <option>Porte Ilegal de Arma</option>
+                <option>Resistência à Prisão</option>
+                <option>Evasão de Custódia</option>
+                <option>Corrupção Passiva</option>
+                <option>Outros</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Artigo do Código Penal</label>
+              <input type="text" id="bo-artigo" placeholder="Ex: Art. 155 CP" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">Envolvidos</h3>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Nome do Suspeito/Vítima *</label>
+              <input type="text" id="bo-envolvido" placeholder="Nome completo" />
+            </div>
+            <div class="field-group">
+              <label>Papel</label>
+              <select id="bo-papel">
+                <option>Suspeito</option>
+                <option>Vítima</option>
+                <option>Testemunha</option>
+                <option>Investigado</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>ID do Personagem (FiveM)</label>
+              <input type="text" id="bo-id-perso" placeholder="Ex: #1234" />
+            </div>
+            <div class="field-group">
+              <label>CPF / Documento</label>
+              <input type="text" id="bo-cpf" placeholder="000.000.000-00" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section full-width">
+          <h3 class="section-title">Descrição dos Fatos</h3>
+          <textarea id="bo-descricao" rows="7" placeholder="Descreva detalhadamente os fatos ocorridos, a sequência dos eventos, ações tomadas pela equipe, etc."></textarea>
+        </div>
+
+        <div class="form-section full-width">
+          <h3 class="section-title">Providências Tomadas</h3>
+          <textarea id="bo-providencias" rows="4" placeholder="Descreva as medidas adotadas: prisão, apreensão, encaminhamento, etc."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- RELATÓRIO POLICIAL -->
+    <div id="form-relatorio" class="form-panel">
+      <div class="form-grid">
+        <div class="form-section">
+          <h3 class="section-title">Cabeçalho do Relatório</h3>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Número do Relatório *</label>
+              <input type="text" id="rel-numero" placeholder="Ex: REL-2024-0042" />
+            </div>
+            <div class="field-group">
+              <label>Data *</label>
+              <input type="date" id="rel-data" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group full">
+              <label>Assunto / Operação *</label>
+              <input type="text" id="rel-assunto" placeholder="Ex: Operação Cerco Máximo — Investigação de Milícia" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Classificação</label>
+              <select id="rel-class">
+                <option>OSTENSIVO</option>
+                <option>RESERVADO</option>
+                <option>CONFIDENCIAL</option>
+                <option>SECRETO</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Unidade Responsável</label>
+              <input type="text" id="rel-unidade" placeholder="Ex: DRCPF / CORE" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section full-width">
+          <h3 class="section-title">Conteúdo do Relatório</h3>
+          <textarea id="rel-intro" rows="4" placeholder="INTRODUÇÃO — Contexto da operação ou investigação..."></textarea>
+        </div>
+        <div class="form-section full-width">
+          <textarea id="rel-corpo" rows="7" placeholder="DESENVOLVIMENTO — Descrição das diligências, informações coletadas, ações realizadas..."></textarea>
+        </div>
+        <div class="form-section full-width">
+          <textarea id="rel-conclusao" rows="4" placeholder="CONCLUSÃO — Resultado alcançado, próximos passos, recomendações..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGISTRO DE PRISÃO -->
+    <div id="form-prisao" class="form-panel">
+      <div class="form-grid">
+        <div class="form-section">
+          <h3 class="section-title">Dados do Preso</h3>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Nome Completo *</label>
+              <input type="text" id="pri-nome" placeholder="Nome do detento" />
+            </div>
+            <div class="field-group">
+              <label>ID FiveM</label>
+              <input type="text" id="pri-id" placeholder="#0000" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Data de Nascimento</label>
+              <input type="date" id="pri-nasc" />
+            </div>
+            <div class="field-group">
+              <label>CPF</label>
+              <input type="text" id="pri-cpf" placeholder="000.000.000-00" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group full">
+              <label>Endereço Residencial</label>
+              <input type="text" id="pri-end" placeholder="Endereço completo" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">Dados da Prisão</h3>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Data e Hora da Prisão *</label>
+              <input type="datetime-local" id="pri-data" />
+            </div>
+            <div class="field-group">
+              <label>Local da Prisão *</label>
+              <input type="text" id="pri-local" placeholder="Endereço da abordagem" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Tipo de Prisão *</label>
+              <select id="pri-tipo">
+                <option>Prisão em Flagrante</option>
+                <option>Prisão Preventiva</option>
+                <option>Prisão Temporária</option>
+                <option>Prisão em Cumprimento de Mandado</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Artigo(s) Infringido(s)</label>
+              <input type="text" id="pri-artigo" placeholder="Art. 33 Lei 11.343/06" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Pena Aplicada (horas RP)</label>
+              <input type="text" id="pri-pena" placeholder="Ex: 60 minutos de detenção" />
+            </div>
+            <div class="field-group">
+              <label>Fiança</label>
+              <select id="pri-fianca">
+                <option>Sem fiança</option>
+                <option>Com fiança — R$ 5.000</option>
+                <option>Com fiança — R$ 10.000</option>
+                <option>Com fiança — R$ 25.000</option>
+                <option>Com fiança — R$ 50.000</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section full-width">
+          <h3 class="section-title">Circunstâncias da Prisão</h3>
+          <textarea id="pri-circunstancias" rows="6" placeholder="Descreva as circunstâncias da abordagem, resistência, condições encontradas..."></textarea>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">Testemunhas / Equipe</h3>
+          <div class="field-row">
+            <div class="field-group full">
+              <label>Agentes Presentes na Prisão</label>
+              <input type="text" id="pri-agentes" placeholder="Nomes e badges separados por vírgula" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGISTRO DE APREENSÃO -->
+    <div id="form-apreensao" class="form-panel">
+      <div class="form-grid">
+        <div class="form-section">
+          <h3 class="section-title">Dados da Apreensão</h3>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Número do Auto *</label>
+              <input type="text" id="apr-numero" placeholder="APR-2024-0001" />
+            </div>
+            <div class="field-group">
+              <label>Data e Hora *</label>
+              <input type="datetime-local" id="apr-data" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group full">
+              <label>Local da Apreensão *</label>
+              <input type="text" id="apr-local" placeholder="Endereço completo" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group full">
+              <label>Proprietário / Envolvido</label>
+              <input type="text" id="apr-prop" placeholder="Nome e ID do proprietário" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section full-width">
+          <h3 class="section-title">Itens Apreendidos</h3>
+          <div id="items-list"></div>
+          <button type="button" class="btn-add-item" onclick="addApreensaoItem()">+ Adicionar Item</button>
+        </div>
+
+        <div class="form-section full-width">
+          <h3 class="section-title">Observações</h3>
+          <textarea id="apr-obs" rows="5" placeholder="Condições dos itens, contexto da apreensão, procedência, etc."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- PORTE DE ARMA -->
+    <div id="form-porte" class="form-panel">
+      <div class="form-grid">
+        <div class="form-section">
+          <h3 class="section-title">Dados do Portador</h3>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Nome Completo *</label>
+              <input type="text" id="prt-nome" placeholder="Nome do portador" />
+            </div>
+            <div class="field-group">
+              <label>CPF *</label>
+              <input type="text" id="prt-cpf" placeholder="000.000.000-00" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>ID FiveM</label>
+              <input type="text" id="prt-id" placeholder="#0000" />
+            </div>
+            <div class="field-group">
+              <label>Profissão / Cargo</label>
+              <input type="text" id="prt-cargo" placeholder="Ex: Segurança Privado" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group full">
+              <label>Endereço</label>
+              <input type="text" id="prt-end" placeholder="Endereço completo" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">Dados da Arma</h3>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Tipo de Arma *</label>
+              <select id="prt-tipo">
+                <option>Pistola</option>
+                <option>Revólver</option>
+                <option>Espingarda</option>
+                <option>Rifle</option>
+                <option>Submetralhadora</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Calibre</label>
+              <input type="text" id="prt-calibre" placeholder="Ex: .40 S&W" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Marca / Modelo</label>
+              <input type="text" id="prt-marca" placeholder="Ex: Glock 17" />
+            </div>
+            <div class="field-group">
+              <label>Número de Série</label>
+              <input type="text" id="prt-serie" placeholder="Ex: BR-482950" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Validade do Porte *</label>
+              <input type="date" id="prt-validade" />
+            </div>
+            <div class="field-group">
+              <label>Restrições</label>
+              <input type="text" id="prt-restricoes" placeholder="Ex: Apenas em serviço" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section full-width">
+          <h3 class="section-title">Justificativa / Observações</h3>
+          <textarea id="prt-obs" rows="4" placeholder="Motivo da concessão do porte, condições especiais, etc."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- LICENÇA DE EMPRESA -->
+    <div id="form-licenca" class="form-panel">
+      <div class="form-grid">
+        <div class="form-section">
+          <h3 class="section-title">Dados da Empresa</h3>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Razão Social *</label>
+              <input type="text" id="lic-razao" placeholder="Nome da empresa" />
+            </div>
+            <div class="field-group">
+              <label>CNPJ *</label>
+              <input type="text" id="lic-cnpj" placeholder="00.000.000/0001-00" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Ramo de Atividade *</label>
+              <select id="lic-ramo">
+                <option>Comércio Varejista</option>
+                <option>Segurança Privada</option>
+                <option>Armamentos e Munições</option>
+                <option>Farmácias e Drogarias</option>
+                <option>Transportadora de Valores</option>
+                <option>Serviços de Saúde</option>
+                <option>Imobiliária</option>
+                <option>Outros</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Responsável Legal *</label>
+              <input type="text" id="lic-resp" placeholder="Nome completo" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group full">
+              <label>Endereço do Estabelecimento *</label>
+              <input type="text" id="lic-end" placeholder="Endereço completo" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">Dados da Licença</h3>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Número da Licença *</label>
+              <input type="text" id="lic-numero" placeholder="LIC-2024-00001" />
+            </div>
+            <div class="field-group">
+              <label>Data de Emissão *</label>
+              <input type="date" id="lic-emissao" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Validade *</label>
+              <input type="date" id="lic-validade" />
+            </div>
+            <div class="field-group">
+              <label>Tipo de Licença</label>
+              <select id="lic-tipo">
+                <option>Licença de Funcionamento</option>
+                <option>Licença Especial de Atividade</option>
+                <option>Licença Provisória</option>
+                <option>Alvará Federal de Operação</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section full-width">
+          <h3 class="section-title">Condições e Restrições</h3>
+          <textarea id="lic-cond" rows="4" placeholder="Condições para funcionamento, restrições de horário, itens autorizados, etc."></textarea>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

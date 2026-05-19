@@ -250,8 +250,8 @@ const formTitles = {
   relatorio: 'Relatório Policial',
   prisao:    'Registro de Prisão',
   apreensao: 'Registro de Apreensão',
-  porte:     'Porte de Arma (Documento Fictício)',
-  licenca:   'Licença de Empresa (Documento Fictício)',
+  porte:     'Porte de Arma',
+  licenca:   'Licença de Empresa',
 };
 
 function showForm(name) {
@@ -364,19 +364,19 @@ function drawHeader(doc, titulo, numero) {
   doc.setTextColor(...COLORS.muted);
   doc.setFontSize(6.5);
   doc.setFont('helvetica', 'bold');
-  doc.text('REPÚBLICA FEDERATIVA DO BRASIL', xText, 11);
+  doc.text('STATE OF SAN ANDREAS', xText, 11);
   doc.setFont('helvetica', 'normal');
-  doc.text('MINISTÉRIO DA JUSTIÇA E SEGURANÇA PÚBLICA', xText, 15.5);
+  doc.text('MINISTRY OF JUSTICE AND PUBLIC SECURITY', xText, 15.5);
 
   doc.setTextColor(...COLORS.gold);
   doc.setFontSize(11.5);
   doc.setFont('helvetica', 'bold');
-  doc.text('DEPARTAMENTO DE POLÍCIA FEDERAL', xText, 21);
+  doc.text('POLICE DEPARTMENT', xText, 21);
 
   doc.setTextColor(...COLORS.muted);
   doc.setFontSize(6.5);
   doc.setFont('helvetica', 'normal');
-  doc.text('SISTEMA DE REGISTRO E PROTOCOLOS FEDERAIS — SRPF', xText, 26);
+  doc.text('REPORTING SYSTEM — RPS', xText, 26);
 
   // Linha dourada separadora
   doc.setDrawColor(...COLORS.gold);
@@ -405,7 +405,7 @@ function drawHeader(doc, titulo, numero) {
   const now = new Date();
   doc.setFont('helvetica', 'normal');
   doc.text(
-    `Emitido em: ${now.toLocaleString('pt-BR')}   |   Agente: ${currentAgent.nome} — Badge ${currentAgent.badge} — ${currentAgent.patente}`,
+    `Emitido em: ${now.toLocaleString('pt-BR')}   |   Officer: ${currentAgent.nome} — Badge ${currentAgent.badge} — ${currentAgent.patente}`,
     W - 12, 52.5, { align: 'right' }
   );
 
@@ -489,8 +489,8 @@ function drawFooter(doc) {
   doc.setTextColor(...COLORS.muted);
   doc.setFontSize(6.5);
   doc.setFont('helvetica', 'normal');
-  doc.text('Este documento é gerado exclusivamente para fins de Roleplay no servidor FiveM.', W / 2, H - 11, { align: 'center' });
-  doc.text('Qualquer uso fora do contexto de RP é estritamente proibido. SRPF v2.4', W / 2, H - 7, { align: 'center' });
+  doc.text('Este documento é gerado exclusivamente para fins de Roleplay no servidor State Of San Andreas.', W / 2, H - 11, { align: 'center' });
+  doc.text('Qualquer uso fora do contexto de State Of San Andreas é estritamente proibido. RPS v2.4', W / 2, H - 7, { align: 'center' });
 
   // Linha de assinatura
   const sigY = H - 28;
@@ -527,7 +527,7 @@ function gerarBO(doc) {
   drawField(doc, 'Papel', val('bo-papel'), m + half + 4, y, half);
   y += 12;
   drawField(doc, 'ID do Personagem', val('bo-id-perso'), m, y, half);
-  drawField(doc, 'CPF / Documento', val('bo-cpf'), m + half + 4, y, half);
+  drawField(doc, 'Documento', val('bo-doc'), m + half + 4, y, half);
   y += 14;
 
   y = drawSectionTitle(doc, 'Descrição dos Fatos', y);
@@ -583,7 +583,7 @@ function gerarPrisao(doc) {
   drawField(doc, 'Data de Nascimento', formatDate(val('pri-nasc')), m, y, half);
   drawField(doc, 'ID FiveM', val('pri-id'), m + half + 4, y, half);
   y += 12;
-  drawField(doc, 'CPF', val('pri-cpf'), m, y, half);
+  drawField(doc, 'Documento', val('pri-doc'), m, y, half);
   drawField(doc, 'Endereço', val('pri-end'), m + half + 4, y, half);
   y += 14;
 
@@ -602,7 +602,7 @@ function gerarPrisao(doc) {
   y = drawTextArea(doc, '', val('pri-circunstancias'), m, y, cw);
 
   y = drawSectionTitle(doc, 'Equipe Responsável', y);
-  drawField(doc, 'Agentes Presentes', val('pri-agentes'), m, y, cw);
+  drawField(doc, 'Officers Presentes', val('pri-agentes'), m, y, cw);
   y += 12;
   drawField(doc, 'Agente Responsável pelo Registro', currentAgent.nome, m, y, half);
   drawField(doc, 'Badge / Patente', `${currentAgent.badge} — ${currentAgent.patente}`, m + half + 4, y, half);
@@ -691,13 +691,13 @@ function gerarPorte(doc) {
   doc.setTextColor(...COLORS.gold);
   doc.setFontSize(7.5);
   doc.setFont('helvetica', 'bold');
-  doc.text('⚠ DOCUMENTO FICTÍCIO — EMITIDO EXCLUSIVAMENTE PARA FINS DE ROLEPLAY NO SERVIDOR FIVEM', W/2, y + 5, { align: 'center' });
+  doc.text('⚠ DOCUMENTO FICTÍCIO — EMITIDO EXCLUSIVAMENTE PARA FINS DE ROLEPLAY NO SERVIDOR STATE OF SAN ANDREAS', W/2, y + 5, { align: 'center' });
   y += 12;
 
   y = drawSectionTitle(doc, 'Dados do Portador', y);
   drawField(doc, 'Nome Completo', val('prt-nome'), m, y, cw);
   y += 12;
-  drawField(doc, 'CPF', val('prt-cpf'), m, y, half);
+  drawField(doc, 'Documento', val('prt-doc'), m, y, half);
   drawField(doc, 'ID FiveM', val('prt-id'), m + half + 4, y, half);
   y += 12;
   drawField(doc, 'Profissão / Cargo', val('prt-cargo'), m, y, half);

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SRPF — Portal de Documentos</title>
+  <title>LSPD — Portal de Documentos</title>
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <!-- jsPDF -->
@@ -15,7 +15,7 @@
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Polícia_Federal_do_Brasil_%28logo%29.svg/200px-Polícia_Federal_do_Brasil_%28logo%29.svg.png" alt="PF" />
-      <div class="sidebar-title">SRPF</div>
+      <div class="sidebar-title">LSPD</div>
     </div>
 
     <div class="agent-card">
@@ -29,14 +29,14 @@
 
     <nav class="sidebar-nav">
       <div class="nav-section-label">OCORRÊNCIAS</div>
-      <a href="#" class="nav-item active" onclick="showForm('bo')">📋 Boletim de Ocorrência</a>
-      <a href="#" class="nav-item" onclick="showForm('relatorio')">📝 Relatório Policial</a>
-      <a href="#" class="nav-item" onclick="showForm('prisao')">🔒 Registro de Prisão</a>
-      <a href="#" class="nav-item" onclick="showForm('apreensao')">📦 Registro de Apreensão</a>
+      <a href="#" class="nav-item active" onclick="showForm('bo')">Boletim de Ocorrência</a>
+      <a href="#" class="nav-item" onclick="showForm('relatorio')">Relatório Policial</a>
+      <a href="#" class="nav-item" onclick="showForm('prisao')">Registro de Prisão</a>
+      <a href="#" class="nav-item" onclick="showForm('apreensao')">Registro de Apreensão</a>
 
       <div class="nav-section-label" style="margin-top:16px;">DOCUMENTOS</div>
-      <a href="#" class="nav-item" onclick="showForm('porte')">🔫 Porte de Arma</a>
-      <a href="#" class="nav-item" onclick="showForm('licenca')">🏢 Licença de Empresa</a>
+      <a href="#" class="nav-item" onclick="showForm('porte')">Porte de Arma</a>
+      <a href="#" class="nav-item" onclick="showForm('licenca')">Licença de Empresa</a>
 
       <div class="nav-section-label" style="margin-top:16px;">SISTEMA</div>
       <a href="#" class="nav-item" onclick="logout()">🚪 Encerrar Sessão</a>
@@ -57,7 +57,7 @@
       <div class="topbar-right">
         <div class="date-display" id="date-display"></div>
         <button class="btn-generate" id="btn-generate" onclick="generatePDF()">
-          ⬇ GERAR PDF
+          ⬇ ENVIAR
         </button>
       </div>
     </div>
@@ -168,7 +168,7 @@
           <div class="field-row">
             <div class="field-group full">
               <label>Assunto / Operação *</label>
-              <input type="text" id="rel-assunto" placeholder="Ex: Operação Cerco Máximo — Investigação de Milícia" />
+              <input type="text" id="rel-assunto" placeholder="Ex: Operação Cerco Máximo" />
             </div>
           </div>
           <div class="field-row">
@@ -183,7 +183,7 @@
             </div>
             <div class="field-group">
               <label>Unidade Responsável</label>
-              <input type="text" id="rel-unidade" placeholder="Ex: DRCPF / CORE" />
+              <input type="text" id="rel-unidade" placeholder="Ex: Patrol Unit / Swat" />
             </div>
           </div>
         </div>
